@@ -7,17 +7,23 @@ const Habit = (props) => {
     props.decrease(props.habit);
   };
 
+  const remove = () => {
+    props.remove(props.habit);
+  };
+
   return (
-    <li className='habit'>
-      <span className='habit-name'>{props.habit.name}</span>
-      <span className='habit-count'>{props.habit.count}</span>
-      <button className='habit-button habit-increase' onClick={increase}>
+    <li className="habit">
+      <span className="habit-name">{props.habit.name}</span>
+      <span className="habit-count">{props.habit.count}</span>
+      <button className="habit-button habit-increase" onClick={increase}>
         더하기
       </button>
-      <button className='habit-button habit-decrease' onClick={decrease}>
+      <button className="habit-button habit-decrease" onClick={decrease}>
         빼기
       </button>
-      <button className='habit-button habit-delete'>삭제</button>
+      <button className="habit-button habit-delete" onClick={remove}>
+        삭제
+      </button>
     </li>
   );
 };

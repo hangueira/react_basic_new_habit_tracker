@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Habit from './Habit';
 
 const Habits = (props) => {
@@ -31,7 +31,20 @@ const Habits = (props) => {
     );
   };
 
-  const decrease = (habit) => {};
+  const remove = (habit) => {
+    setHabits(habits.filter((item) => habit.id !== item.id));
+  };
+
+  const decrease = (habit) => {
+    setHabits((habits) =>
+      habits.map((item) => {
+        if (item.id === habit.id) {
+          return { ...habit, count: habit.count - 1 };
+        }
+        return item;
+      })
+    );
+  };
 
   return (
     <>
@@ -41,6 +54,7 @@ const Habits = (props) => {
           habit={habit}
           increase={increase}
           decrease={decrease}
+          remove={remove}
         />
       ))}
     </>
