@@ -39,7 +39,7 @@ const Habits = (props) => {
     setHabits((habits) =>
       habits.map((item) => {
         if (item.id === habit.id) {
-          return { ...habit, count: habit.count - 1 };
+          return { ...habit, count: habit.count - 1 < 0 ? 0 : habit.count - 1 };
         }
         return item;
       })
