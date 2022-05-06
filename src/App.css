@@ -4,10 +4,23 @@ button {
   cursor: pointer;
 }
 
+.add-input {
+  font-size: 2rem;
+  margin-right: 0.2em;
+}
+
 .habit {
   font-size: 2.5rem;
   padding: 0.5em;
   list-style: none;
+}
+
+.add-button {
+  height: 100%;
+  font-size: 1.5rem;
+  padding: 0.3em 0.5em;
+  background-color: green;
+  color: white;
 }
 
 .habit-count {
@@ -42,4 +55,12 @@ button {
 .habit-delete {
   font-size: 2rem;
   color: darkred;
+}
+
+.habit-reset {
+  height: 100%;
+  font-size: 1.5rem;
+  padding: 0.3em 0.5em;
+  background-color: green;
+  color: white;
 }

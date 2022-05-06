@@ -16,6 +16,9 @@ const Habits = (props) => {
           />
         ))}
       </ul>
+      <button className='habit-reset' onClick={props.reset}>
+        리셋
+      </button>
     </>
   );
 };

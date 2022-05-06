@@ -55,6 +55,15 @@ function App() {
     setHabits(newHabits);
   };
 
+  const reset = () => {
+    const newHabits = habits.map((habit) => {
+      habit.count = 0;
+      return habit;
+    });
+
+    setHabits(newHabits);
+  };
+
   return (
     <>
       <Navbar
@@ -68,6 +77,7 @@ function App() {
         decrease={decrease}
         remove={remove}
         onAdd={onAdd}
+        reset={reset}
       />
     </>
   );
