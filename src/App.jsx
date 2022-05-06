@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Habits from './components/Habits';
-import Input from './components/Input';
+
 import Navbar from './components/Navbar';
 
 function App() {
@@ -49,18 +49,25 @@ function App() {
     setHabits(habits.filter((item) => habit.id !== item.id));
   };
 
+  const onAdd = (name) => {
+    const newHabits = [...habits, { id: Date.now(), name, count: 0 }];
+    console.log(newHabits);
+    setHabits(newHabits);
+  };
+
   return (
     <>
       <Navbar
         count={habits.filter((habit) => habit.count > 0).length}
         totalCount={habits.length}
       />
-      <Input />
+
       <Habits
         habits={habits}
         increase={increase}
         decrease={decrease}
         remove={remove}
+        onAdd={onAdd}
       />
     </>
   );
