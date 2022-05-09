@@ -4,7 +4,7 @@ import HabitAddForm from './HabitAddForm';
 const Habits = (props) => {
   return (
     <>
-      <HabitAddForm onAdd={props.onAdd} />
+      <HabitAddForm onAdd={props.onAdd} save={props.habitSave} />
       <ul>
         {props.habits.map((habit) => (
           <Habit
