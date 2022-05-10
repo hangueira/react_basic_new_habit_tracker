@@ -7,8 +7,8 @@ function App({ habitService }) {
   const [habits, setHabits] = useState([]);
 
   useEffect(() => {
-    getHabits();
-  }, []);
+    habitService.getHabits().then((data) => setHabits(data));
+  }, [habitService]);
 
   const getHabits = () => {
     habitService
