@@ -2,33 +2,27 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Habits from './components/Habits';
 import Navbar from './components/Navbar';
-import axios from 'axios';
 
-function App() {
-  const baseUrl = 'http://localhost:8080';
-
-  const getHabits = async () => {
-    await axios
-      .get(baseUrl + '/habit')
-      .then((result) => {
-        setHabits(result.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
+function App({ habitService }) {
   const [habits, setHabits] = useState([]);
 
   useEffect(() => {
     getHabits();
   }, []);
 
+  const getHabits = () => {
+    habitService
+      .getHabits()
+      .then((data) => setHabits(data))
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const increase = async (habit) => {
-    await axios
-      .put(baseUrl + '/habit/' + habit.id, {
-        count: habit.count + 1,
-      })
+    const count = habit.count + 1;
+    habitService
+      .onChangeCount(habit, count)
       .then(() => {
         setHabits((habits) =>
           habits.map((item) => {
@@ -38,60 +32,76 @@ function App() {
             return item;
           })
         );
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
   const decrease = async (habit) => {
-    await axios
-      .put(baseUrl + '/habit/' + habit.id, {
-        count: habit.count - 1 < 0 ? 0 : habit.count - 1,
-      })
-      .then(() => {
-        setHabits((habits) =>
-          habits.map((item) => {
-            if (item.id === habit.id) {
-              return {
-                ...habit,
-                count: habit.count - 1 < 0 ? 0 : habit.count - 1,
-              };
-            }
-            return item;
-          })
-        );
-      });
+    const count = habit.count - 1 < 0 ? 0 : habit.count - 1;
+
+    habit.count &&
+      habitService
+        .onChangeCount(habit, count)
+        .then(() => {
+          setHabits((habits) =>
+            habits.map((item) => {
+              if (item.id === habit.id) {
+                return {
+                  ...habit,
+                  count,
+                };
+              }
+              return item;
+            })
+          );
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   };
 
   const remove = async (habit) => {
-    await axios.delete(baseUrl + '/habit/' + habit.id).then(() => {
-      setHabits((habits) => habits.filter((item) => item.id !== habit.id));
-    });
+    habitService
+      .onRemove(habit) //
+      .then(() => {
+        setHabits((habits) => habits.filter((item) => item.id !== habit.id));
+      });
 
     setHabits(habits.filter((item) => habit.id !== item.id));
   };
 
   const onAdd = async (name) => {
-    await axios
-      .post(baseUrl + '/habit', {
-        name,
-        count: 0,
-      })
-      .then((result) => {
-        console.log(result.data);
+    habitService
+      .onAdd(name)
+      .then(() => {
         getHabits();
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
   const reset = async () => {
-    await axios.put(baseUrl + '/habit').then((result) => {
-      setHabits((habits) =>
-        habits.map((habit) => {
-          if (habit.count !== 0) {
-            return { ...habit, count: 0 };
-          }
-          return habit;
+    const totalCount = habits.filter((habit) => habit.count > 0).length;
+
+    totalCount &&
+      habitService
+        .onReset()
+        .then(() => {
+          setHabits((habits) =>
+            habits.map((habit) => {
+              if (habit.count !== 0) {
+                return { ...habit, count: 0 };
+              }
+              return habit;
+            })
+          );
         })
-      );
-    });
+        .catch((error) => {
+          console.error(error);
+        });
   };
 
   return (
