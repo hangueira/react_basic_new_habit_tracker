@@ -61,7 +61,11 @@ function App() {
       });
   };
 
-  const remove = (habit) => {
+  const remove = async (habit) => {
+    await axios.delete(baseUrl + '/habit/' + habit.id).then(() => {
+      setHabits((habits) => habits.filter((item) => item.id !== habit.id));
+    });
+
     setHabits(habits.filter((item) => habit.id !== item.id));
   };
 
@@ -74,25 +78,20 @@ function App() {
       .then((result) => {
         console.log(result.data);
         getHabits();
-      })
-      .then(() => {
-        if (window.confirm('정말 저장하시겠습니까')) {
-          alert('저장되었습니다.');
-        } else {
-          alert('취소되었습니다.');
-        }
       });
   };
 
-  const reset = () => {
-    const newHabits = habits.map((habit) => {
-      if (habit.count !== 0) {
-        return { ...habit, count: 0 };
-      }
-      return habit;
+  const reset = async () => {
+    await axios.put(baseUrl + '/habit').then((result) => {
+      setHabits((habits) =>
+        habits.map((habit) => {
+          if (habit.count !== 0) {
+            return { ...habit, count: 0 };
+          }
+          return habit;
+        })
+      );
     });
-
-    setHabits(newHabits);
   };
 
   return (
